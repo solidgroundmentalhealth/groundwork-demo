@@ -1,0 +1,212 @@
+{
+  "source": "User-provided photograph of October 2026 accounting notebook",
+  "status": "headings-transcribed-only; amounts-not-imported",
+  "notes": "Printed account names preserved with minor typographic punctuation normalization. Handwritten rows 33–35 are Software + Net, Startup, Training. Printed ledger sections are deductible rows 1–35 and non-deductible rows 51–56. These labels are bookkeeping headings, not assertions about tax deductibility. No PHI or dollar amounts stored.",
+  "categories": [
+    {
+      "account": "1",
+      "label": "MDSE.-MATERIALS",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "2",
+      "label": "ACCOUNTING",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "3",
+      "label": "ADVERTISING",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "4",
+      "label": "AUTO EXPENSE",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "5",
+      "label": "CARTONS, ETC.",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "6",
+      "label": "CONTRIBUTIONS",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "7",
+      "label": "DELIVERY EXP.",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "8",
+      "label": "ELECTRICITY",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "9",
+      "label": "ENTERTAINMENT",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "10",
+      "label": "FREIGHT & EXPR.",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "11",
+      "label": "HEAT",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "12",
+      "label": "INSURANCE",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "13",
+      "label": "INTEREST",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "14",
+      "label": "LAUNDRY",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "15",
+      "label": "LEGAL EXPENSE",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "16",
+      "label": "LICENSES",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "17",
+      "label": "MISC. EXP.",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "18",
+      "label": "OFFICE EXP.",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "19",
+      "label": "POSTAGE",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "20",
+      "label": "RENT",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "21",
+      "label": "REPAIRS",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "22",
+      "label": "TAX – SALES",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "23",
+      "label": "TAX – SOC. SEC./MED.",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "24",
+      "label": "TAX – STATE U. I.",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "25",
+      "label": "TAX – OTHER",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "26",
+      "label": "SELLING EXP.",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "27",
+      "label": "SUPPLIES",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "28",
+      "label": "TELEPHONE",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "29",
+      "label": "TRADE DUES, ETC.",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "30",
+      "label": "TRAVELING EXP.",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "31",
+      "label": "WAGES & COMM.",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "32",
+      "label": "WATER",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "33",
+      "label": "Software + Net",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "34",
+      "label": "Startup",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "35",
+      "label": "Training",
+      "section": "deductible-ledger"
+    },
+    {
+      "account": "51",
+      "label": "NOTES PAYABLE",
+      "section": "non-deductible-ledger"
+    },
+    {
+      "account": "52",
+      "label": "FEDERAL INC. TAX",
+      "section": "non-deductible-ledger"
+    },
+    {
+      "account": "53",
+      "label": "LOANS PAYABLE",
+      "section": "non-deductible-ledger"
+    },
+    {
+      "account": "54",
+      "label": "LOANS RECEIV.",
+      "section": "non-deductible-ledger"
+    },
+    {
+      "account": "55",
+      "label": "PERSONAL",
+      "section": "non-deductible-ledger"
+    },
+    {
+      "account": "56",
+      "label": "FIXED ASSETS",
+      "section": "non-deductible-ledger"
+    }
+  ]
+}
