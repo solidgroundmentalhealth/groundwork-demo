@@ -1,0 +1,10 @@
+{
+  "name": "Groundwork — Angus's Workshop",
+  "short_name": "Groundwork",
+  "description": "Groundwork development preview (test notes only)",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f5ee",
+  "theme_color": "#294d38"
+}
