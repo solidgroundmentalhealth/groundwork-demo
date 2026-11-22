@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#294d38"><title>Groundwork v0.3 | Angus</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<style>
+:root{font-family:system-ui,Segoe UI,sans-serif;color:#243f30;background:#f7f5ee}*{box-sizing:border-box}body{margin:0}header{background:#e9eee3;padding:22px max(20px,calc((100vw - 900px)/2));border-bottom:1px solid #c8d4c6}h1{font-family:Georgia,serif;margin:0;color:#294d38}header p{margin:6px 0 0}main{max-width:900px;margin:auto;padding:24px 18px}.card{background:#fffefa;border:1px solid #d7dfd0;border-radius:14px;padding:20px;margin:18px 0}h2{font-family:Georgia,serif}label{display:block;margin:12px 0 5px;font-weight:600}input,textarea{width:100%;font:inherit;border:1px solid #aab9a9;border-radius:8px;padding:10px}textarea{min-height:90px}button{font:inherit;background:#294d38;color:white;border:0;border-radius:8px;padding:11px 16px;margin:12px 8px 0 0;cursor:pointer}button:disabled{opacity:.5}.notice{background:#fff3d9;border-left:4px solid #b48b36;padding:12px}small{color:#52695b}.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.entry{padding:12px 0;border-bottom:1px solid #e1e6dc;overflow-wrap:anywhere}footer{padding:25px 0;color:#56675a}
+</style></head>
+<body><header><h1>Groundwork <span aria-hidden="true">🦔</span></h1><p>The business behind Solid Ground · Angus's workshop · v0.3 foundation</p></header>
+<main>
+<p class="notice"><strong>Development preview — not for real financial records or client information.</strong> This experimental page stores sample notes only on this device. It does not sync, encrypt, or replace your existing Groundwork prototype.</p>
+<section class="card"><h2>Angus's desk</h2><p>“Everything in its place. Let's see how the business is doing.”</p>
+<p id="storage-status" role="status">Checking local database…</p>
+<form id="note-form"><label for="note">Sample development note (no private information)</label><textarea id="note" maxlength="500" required placeholder="Example: Test offline save"></textarea><button type="submit">Save test note locally</button></form>
+<div class="row"><button type="button" id="export">Export test notes as JSON</button><button type="button" id="import">Restore test notes from JSON</button><input id="import-file" type="file" accept=".json,application/json" hidden aria-label="Select test notes backup"><button type="button" id="clear">Delete all test notes</button></div>
+<h2>Saved test notes</h2><div id="notes" aria-live="polite"></div></section>
+<footer>Private repository source code is not the same as encrypted data storage. Keep real records out of this preview.</footer></main>
+<script type="module">
+const DB_NAME='groundwork-development-preview',STORE='test_notes',VERSION=1;
+const status=document.querySelector('#storage-status'),list=document.querySelector('#notes');
+let db;
+function openDB(){return new Promise((resolve,reject)=>{const request=indexedDB.open(DB_NAME,VERSION);request.onupgradeneeded=()=>{const d=request.result;if(!d.objectStoreNames.contains(STORE))d.createObjectStore(STORE,{keyPath:'id'});};request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error);});}
+function tx(mode,action){return new Promise((resolve,reject)=>{const t=db.transaction(STORE,mode),store=t.objectStore(STORE);let value;t.oncomplete=()=>resolve(value);t.onerror=()=>reject(t.error);const req=action(store);if(req){req.onsuccess=()=>{value=req.result;};}});}
+async function all(){return (await tx('readonly',s=>s.getAll())).sort((a,b)=>b.createdAt.localeCompare(a.createdAt));}
+async function render(){const entries=await all();list.replaceChildren();if(!entries.length){list.textContent='No test notes yet.';return;}for(const e of entries){const div=document.createElement('div');div.className='entry';const time=document.createElement('small');time.textContent=new Date(e.createdAt).toLocaleString();const p=document.createElement('p');p.textContent=e.text;div.append(time,p);list.append(div);}}
+function report(error){status.textContent='Local storage error: '+String(error?.message||error);}
+document.querySelector('#note-form').addEventListener('submit',async event=>{event.preventDefault();if(!db)return;const field=document.querySelector('#note'),text=field.value.trim();if(!text)return;try{await tx('readwrite',s=>s.put({id:crypto.randomUUID(),text,createdAt:new Date().toISOString()}));field.value='';await render();status.textContent='Test note saved on this device.';}catch(e){report(e);}});
+document.querySelector('#export').addEventListener('click',async()=>{try{const data=JSON.stringify({format:'groundwork-test-notes',version:1,exportedAt:new Date().toISOString(),notes:await all()},null,2);const url=URL.createObjectURL(new Blob([data],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='groundwork-test-notes.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}catch(e){report(e);}});
+
+// Restore is additive: never silently replace or delete existing records.
+document.querySelector('#import').addEventListener('click',()=>document.querySelector('#import-file').click());
+document.querySelector('#import-file').addEventListener('change',async event=>{
+ const file=event.target.files?.[0];event.target.value='';if(!file||!db)return;
+ if(file.size>1024*1024){status.textContent='Backup rejected: file exceeds 1 MB.';return;}
+ try{
+  const payload=JSON.parse(await file.text());
+  if(!payload||payload.format!=='groundwork-test-notes'||payload.version!==1||!Array.isArray(payload.notes)||payload.notes.length>5000)throw Error('Unsupported backup format or version.');
+  const ids=new Set();
+  for(const item of payload.notes){
+   if(!item||typeof item.id!=='string'||!(/^[0-9a-f-]{36}$/i).test(item.id)||ids.has(item.id)||
+      typeof item.text!=='string'||!item.text.trim()||item.text.length>500||
+      typeof item.createdAt!=='string'||!Number.isFinite(Date.parse(item.createdAt)))throw Error('Backup contains an invalid or duplicate note.');
+   ids.add(item.id);
+  }
+  const existing=await all();const known=new Map(existing.map(item=>[item.id,item]));
+  const additions=payload.notes.filter(item=>!known.has(item.id));
+  const conflicts=payload.notes.filter(item=>known.has(item.id)&&(known.get(item.id).text!==item.text||known.get(item.id).createdAt!==item.createdAt));
+  if(conflicts.length)throw Error('Backup conflicts with existing note IDs. No notes were restored.');
+  if(!additions.length){status.textContent='No new test notes to restore.';return;}
+  if(!confirm('Restore '+additions.length+' new test note(s)? Existing notes will be preserved.'))return;
+  await new Promise((resolve,reject)=>{
+   const transaction=db.transaction(STORE,'readwrite'),store=transaction.objectStore(STORE);
+   transaction.oncomplete=resolve;transaction.onerror=()=>reject(transaction.error);
+   for(const item of additions)store.add({id:item.id,text:item.text,createdAt:item.createdAt});
+  });
+  await render();status.textContent='Restored '+additions.length+' test note(s). Existing notes preserved.';
+ }catch(error){status.textContent='Restore failed: '+String(error.message||error);}
+});
+document.querySelector('#clear').addEventListener('click',async()=>{if(!confirm('Delete all test notes stored in this browser?'))return;try{await tx('readwrite',s=>s.clear());await render();status.textContent='Test notes deleted.';}catch(e){report(e);}});
+try{db=await openDB();status.textContent='Local IndexedDB is available. Test notes stay in this browser.';await render();}catch(e){report(e);document.querySelector('#note-form button').disabled=true;}
+if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./service-worker.js').catch(()=>{});
+</script></body></html>
